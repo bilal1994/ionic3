@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import{Locations} from '../../modle/locations'
+import { InimportserviceProvider } from '../../providers/inimportservice/inimportservice';
 
-import { MyimportServiceProvider } from '../../providers/myimport-service/myimport-service';
+// import { MyimportServiceProvider } from '../../providers/myimport-service/myimport-service';
 import{Observable} from 'rxjs/observable'
 import{ AngularFireDatabase , AngularFireObject} from 'angularfire2/database'
+import { ContactPage } from '../contact/contact';
 
 /**
  * Generated class for the MyimportPage page.
@@ -19,7 +21,7 @@ import{ AngularFireDatabase , AngularFireObject} from 'angularfire2/database'
   templateUrl: 'myimport.html',
 })
 export class MyimportPage {
-MyimportList:AngularFireObject<any>; 
+inimportList:AngularFireObject<any>; 
   locations:Locations={
     key :'',
     latitude:'',
@@ -31,9 +33,9 @@ MyimportList:AngularFireObject<any>;
   myObject =[]
   
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public MyimportServiceProvider:MyimportServiceProvider, db: AngularFireDatabase,public alertCtrl: AlertController ) {
-    this.MyimportList=db.object('myimporttmap');
-    this.MyimportList.snapshotChanges().subscribe(action=>{
+  constructor(public navCtrl: NavController, public navParams: NavParams,public inimportserviceProvider:InimportserviceProvider, db: AngularFireDatabase,public alertCtrl: AlertController ) {
+    this.inimportList=db.object('inimportmap');
+    this.inimportList.snapshotChanges().subscribe(action=>{
       if(action.payload.val()==null|| action.payload.val()==undefined){
         console.log('no data')
       }else{
@@ -53,17 +55,18 @@ MyimportList:AngularFireObject<any>;
     console.log('ionViewDidLoad MyimportPage');
   }
 updateLocation(locations:Locations){
-  this.MyimportServiceProvider.updateLocation(locations).then ( ()=>{
+  this.inimportserviceProvider.updateLocation(locations).then ( ()=>{
+    this.navCtrl.setRoot(ContactPage)
     console.log('updated')
   })
 }
 removeLocation(locations:Locations){
-  this.MyimportServiceProvider.removeLocation(locations).then ( ()=>{
+   this.inimportserviceProvider.removeLocation(locations).then ( ()=>{
+    this.navCtrl.setRoot(ContactPage)
     console.log('deleted')
-  })
-
+   })
+  console.log(locations)
 }
-
 
 
 showPrompt(key , info, latitude, longitude) {
@@ -73,15 +76,15 @@ showPrompt(key , info, latitude, longitude) {
     inputs: [
       {
         name: 'Info',
-        placeholder:info
+        value:info
       },
       {
         name: 'Latitude',
-        placeholder: latitude
+        value: latitude
       },
       {
         name: 'Longitude',
-        placeholder: longitude
+        value: longitude
       },
     ],
     buttons: [
@@ -94,13 +97,13 @@ showPrompt(key , info, latitude, longitude) {
       {
         text: 'Save',
         handler: data => {
-          //console.log('Saved clicked');
+          ///console.log('Saved clicked');
           this.locations.info = data.Info
           this.locations.latitude = data.Latitude
           this.locations.longitude = data.Longitude
           this.locations.key = key
           console.log(this.locations)
-          //this.updateLocation(this.locations)
+          this.updateLocation(this.locations)
         }
       }
     ]

@@ -19,22 +19,22 @@
 
 
     <ion-list>
-        <ion-item-sliding *ngFor='let Myimport of myObject'>
+        <ion-item-sliding *ngFor='let inimport of myObject'>
           <ion-item>
             <ion-avatar item-start>
               <img src="assets/imgs/gps_PNG4.png">
             </ion-avatar>
-            <h2>{{Myimport[1]['info']}}</h2>
+            <h2>{{inimport[1]['info']}}</h2>
           </ion-item>
           <ion-item-options side="left">
-            <button ion-button color="primary" (click)="showPrompt(Myimport[0],Myimport[1]['info'],Myimport[1]['latitude'],Myimport[1]['longitude'])">
+            <button ion-button color="primary" (click)="showPrompt(inimport[0],inimport[1]['info'],inimport[1]['latitude'],inimport[1]['longitude'])">
               <ion-icon name="ios-create"></ion-icon>
               Edit
             </button>
             
           </ion-item-options>
           <ion-item-options side="right">
-            <button ion-button color="danger" (click)='removeLocation(Myimport[0])'>
+            <button ion-button color="danger" (click)='removeLocation(inimport)'>
               <ion-icon name="ios-trash"></ion-icon>
               Delete
             </button>
