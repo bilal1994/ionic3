@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import{Locations} from '../../modle/locations'
-import{AddimportserviceProvider} from '../../providers/addimportservice/addimportservice'
+
+import { MyimportServiceProvider } from '../../providers/myimport-service/myimport-service';
 import{Observable} from 'rxjs/observable'
 import{ AngularFireDatabase , AngularFireObject} from 'angularfire2/database'
 
@@ -30,15 +31,18 @@ MyimportList:AngularFireObject<any>;
   myObject =[]
   
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public addimportserviceProvider:AddimportserviceProvider, db: AngularFireDatabase,public alertCtrl: AlertController ) {
-    this.MyimportList=db.object('giftmap');
+  constructor(public navCtrl: NavController, public navParams: NavParams,public MyimportServiceProvider:MyimportServiceProvider, db: AngularFireDatabase,public alertCtrl: AlertController ) {
+    this.MyimportList=db.object('myimporttmap');
     this.MyimportList.snapshotChanges().subscribe(action=>{
-      let y=action.payload.toJSON()
-      y['key']=action.key
-  this.itemArray.push(action.payload.val() as Locations)
-  console.log(this.itemArray)
-  this.myObject= Object.entries(this.itemArray [0])
-        console.log(this.myObject)
+      if(action.payload.val()==null|| action.payload.val()==undefined){
+        console.log('no data')
+      }else{
+        this.itemArray.push(action.payload.val() as Locations)
+        console.log(this.itemArray)
+        this.myObject=Object.entries(this.itemArray [0])
+        console.log('myObject: '+ this.myObject)
+      }
+
       });
     }
   
@@ -49,12 +53,12 @@ MyimportList:AngularFireObject<any>;
     console.log('ionViewDidLoad MyimportPage');
   }
 updateLocation(locations:Locations){
-  this.addimportserviceProvider.updateLocation(locations).then ( ()=>{
+  this.MyimportServiceProvider.updateLocation(locations).then ( ()=>{
     console.log('updated')
   })
 }
 removeLocation(locations:Locations){
-  this.addimportserviceProvider.removeLocation(locations).then ( ()=>{
+  this.MyimportServiceProvider.removeLocation(locations).then ( ()=>{
     console.log('deleted')
   })
 

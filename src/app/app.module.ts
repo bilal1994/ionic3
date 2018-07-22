@@ -20,6 +20,8 @@ import{AngularFireDatabaseModule} from 'angularfire2/database'
 import { AddimportserviceProvider } from '../providers/addimportservice/addimportservice';
 import { InimportserviceProvider } from '../providers/inimportservice/inimportservice';
 
+import { MyimportServiceProvider } from '../providers/myimport-service/myimport-service';
+
 export  const  firebaseConfig = {
   apiKey: "AIzaSyDc__qclxqwK8fc4z5XRABbgwIAc1KG7Qg",
   authDomain: "ionicas-397ad.firebaseapp.com",
@@ -66,7 +68,9 @@ export  const  firebaseConfig = {
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AddimportserviceProvider,
-    InimportserviceProvider
+    InimportserviceProvider,
+
+    MyimportServiceProvider
   ]
 })
 export class AppModule {}
